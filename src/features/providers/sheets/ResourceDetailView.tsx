@@ -123,7 +123,9 @@ export function ResourceDetailView({ resource, usageByProvider }: ResourceDetail
   return (
     <div>
       <div className={styles.detailHeader}>
-        <div className={styles.sectionTitle}>{resource.name ?? resource.identifier}</div>
+        <div className={styles.sectionTitle}>
+          {resource.accountLabel ?? resource.name ?? resource.identifier}
+        </div>
       </div>
 
       <dl className={styles.dl}>

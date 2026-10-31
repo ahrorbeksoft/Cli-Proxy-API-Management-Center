@@ -177,6 +177,16 @@ export function ProviderResourceTable({
         </div>
       );
     }
+    if (r.accountLabel) {
+      return (
+        <div className={styles.primaryCell}>
+          <span className={styles.primaryName} title={r.accountLabel}>
+            {r.accountLabel}
+          </span>
+          <span className={styles.primarySub}>{r.apiKeyPreview ?? '—'}</span>
+        </div>
+      );
+    }
     return (
       <div className={styles.primaryCell}>
         <span className={styles.primaryName}>{r.apiKeyPreview ?? '—'}</span>

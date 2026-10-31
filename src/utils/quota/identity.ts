@@ -17,6 +17,8 @@ export function getQuotaCacheKey(file: AuthFileItem): string {
 
 /** Disambiguate same-name cards without ever falling back to account (a secret). */
 export function getQuotaDisplayName(file: AuthFileItem): string {
+  // Factory entry names are synthetic ("group · masked key"); the resolved email reads better.
+  if (isFactoryFile(file)) return file.email?.trim() || file.name;
   if (!isDevinFile(file) && !isPluginQuotaFile(file)) return file.name;
   const identity = file.email?.trim() || normalizeRecentRequestAuthIndex(file.authIndex);
   return identity ? `${file.name} · ${identity}` : file.name;

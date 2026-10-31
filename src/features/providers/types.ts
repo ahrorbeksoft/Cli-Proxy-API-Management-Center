@@ -92,6 +92,8 @@ export interface ProviderResource {
   /** 用于 selector 的真实 apiKey;OpenAI 因为多密钥这里返回 null */
   apiKey: string | null;
   authIndex: string | null;
+  /** Account identity resolved from the upstream (e.g. Factory email); display-only. */
+  accountLabel?: string | null;
   baseUrl: string | null;
   proxyUrl: string | null;
   prefix: string | null;

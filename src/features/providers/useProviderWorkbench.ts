@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { providersApi } from '@/services/api';
 import { getErrorMessage } from '@/utils/helpers';
 import { useAuthStore, useConfigStore } from '@/stores';
+import { useFactoryAccountLabels } from '@/hooks/useFactoryAccountLabels';
 import {
   stripDisableAllModelsRule,
   withDisableAllModelsRule,
@@ -27,6 +28,7 @@ import {
   qiniuCloudToResource,
   kimiToResource,
   vertexToResource,
+  withAccountLabels,
   xaiToResource,
 } from './adapters';
 import { PROVIDER_BRAND_ORDER, PROVIDER_DESCRIPTORS } from './descriptors';
@@ -528,13 +530,15 @@ export function useProviderWorkbench(): UseProviderWorkbenchResult {
 
   /* ------------------- snapshot 计算 ------------------- */
 
+  const factoryLabels = useFactoryAccountLabels(config?.factoryApiKeys, connected);
+
   const snapshot = useMemo<ProviderSnapshot | null>(() => {
     if (!config) return null;
     return {
       fetchedAt,
-      groups: buildProviderGroups(config),
+      groups: withAccountLabels(buildProviderGroups(config), 'factory', factoryLabels),
     };
-  }, [config, fetchedAt]);
+  }, [config, factoryLabels, fetchedAt]);
 
   /* ------------------- mutations ------------------- */
 

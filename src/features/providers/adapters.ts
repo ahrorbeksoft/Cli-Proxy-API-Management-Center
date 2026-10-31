@@ -1,5 +1,6 @@
 import type { GeminiKeyConfig, OpenAIProviderConfig, ProviderKeyConfig } from '@/types';
 import { hasDisableAllModelsRule, stripDisableAllModelsRule } from '@/components/providers/utils';
+import { normalizeAuthIndex } from '@/utils/authIndex';
 import { maskApiKey } from '@/utils/format';
 import {
   APIKEY_FUN_DISPLAY_NAME,
@@ -27,6 +28,7 @@ import {
 } from './kimi';
 import type {
   ProviderBrand,
+  ProviderGroup,
   ProviderResource,
   ProviderResourceSelector,
   SponsorProviderBrand,
@@ -125,6 +127,27 @@ export function metaToResource(config: ProviderKeyConfig, index: number): Provid
 
 export function factoryToResource(config: ProviderKeyConfig, index: number): ProviderResource {
   return providerKeyToResource('factory', config, index);
+}
+
+/** Attach upstream account labels, keyed by auth index, to one brand's resources. */
+export function withAccountLabels(
+  groups: ProviderGroup[],
+  brand: ProviderBrand,
+  labels: Readonly<Record<string, string>>
+): ProviderGroup[] {
+  if (!Object.keys(labels).length) return groups;
+  return groups.map((group) =>
+    group.id !== brand
+      ? group
+      : {
+          ...group,
+          resources: group.resources.map((resource) => {
+            const authIndex = normalizeAuthIndex(resource.authIndex);
+            const label = authIndex ? labels[authIndex] : undefined;
+            return label ? { ...resource, accountLabel: label } : resource;
+          }),
+        }
+  );
 }
 
 export function xaiToResource(config: ProviderKeyConfig, index: number): ProviderResource {

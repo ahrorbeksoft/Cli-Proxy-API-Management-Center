@@ -63,6 +63,7 @@ const matchesFilter = (r: ProviderResource, normalized: string): boolean => {
   const haystack = [
     r.identifier,
     r.name,
+    r.accountLabel,
     r.authIndex,
     r.apiKeyPreview,
     r.apiKey,
@@ -76,7 +77,13 @@ const matchesFilter = (r: ProviderResource, normalized: string): boolean => {
 };
 
 const getResourceSortName = (resource: ProviderResource): string =>
-  (resource.name ?? resource.identifier ?? resource.apiKeyPreview ?? '').toLowerCase();
+  (
+    resource.accountLabel ??
+    resource.name ??
+    resource.identifier ??
+    resource.apiKeyPreview ??
+    ''
+  ).toLowerCase();
 
 const getResourceRecentSuccess = (
   resource: ProviderResource,
@@ -317,7 +324,12 @@ export function ProvidersWorkbenchPage({ fixedBrand }: ProvidersWorkbenchPagePro
 
   const handleDelete = useCallback(
     (resource: ProviderResource) => {
-      const name = resource.name ?? resource.apiKeyPreview ?? resource.identifier ?? '';
+      const name =
+        resource.accountLabel ??
+        resource.name ??
+        resource.apiKeyPreview ??
+        resource.identifier ??
+        '';
       showConfirmation({
         title: t('providersPage.delete.title'),
         message: t('providersPage.delete.confirm', { name }),

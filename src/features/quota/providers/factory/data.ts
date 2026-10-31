@@ -52,6 +52,27 @@ export function buildFactoryQuotaFiles(
   return files;
 }
 
+/**
+ * Show the resolved account (email or organization) on Factory entries. Only `email`
+ * changes, so cache keys (name + auth index) and auto-load attempts stay stable.
+ */
+export function withFactoryAccountLabels(
+  files: AuthFileItem[],
+  labels: Readonly<Record<string, string>>
+): AuthFileItem[] {
+  if (!Object.keys(labels).length) return files;
+  let changed = false;
+  const next = files.map((file) => {
+    if (!isFactoryFile(file)) return file;
+    const authIndex = normalizeAuthIndex(file.authIndex ?? file['auth_index']);
+    const label = authIndex ? labels[authIndex] : undefined;
+    if (!label || file.email === label) return file;
+    changed = true;
+    return { ...file, email: label };
+  });
+  return changed ? next : files;
+}
+
 const withLabels = (quota: FactoryQuotaData, t: TFunction): FactoryQuotaData => ({
   ...quota,
   windows: quota.windows.map((window) => ({

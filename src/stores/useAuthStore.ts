@@ -12,6 +12,7 @@ import { obfuscatedStorage } from '@/services/storage/secureStorage';
 import { apiClient } from '@/services/api/client';
 import { LegacyBackendError, probeLegacyBackend } from '@/services/api/legacyBackendProbe';
 import { useConfigStore } from './useConfigStore';
+import { useFactoryAccountStore } from './useFactoryAccountStore';
 import { useModelsStore } from './useModelsStore';
 import { useQuotaStore } from './useQuotaStore';
 import { detectApiBaseFromLocation, normalizeApiBase } from '@/utils/connection';
@@ -123,6 +124,7 @@ export const useAuthStore = create<AuthStoreState>()(
           useConfigStore.getState().clearCache();
           useModelsStore.getState().clearCache();
           useQuotaStore.getState().clearQuotaCache();
+          useFactoryAccountStore.getState().clearCache();
 
           // 配置 API 客户端
           apiClient.setConfig({
@@ -172,6 +174,7 @@ export const useAuthStore = create<AuthStoreState>()(
         useConfigStore.getState().clearCache();
         useModelsStore.getState().clearCache();
         useQuotaStore.getState().clearQuotaCache();
+        useFactoryAccountStore.getState().clearCache();
         set({
           isAuthenticated: false,
           apiBase: '',

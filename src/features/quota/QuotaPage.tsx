@@ -17,6 +17,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { IconSearch, IconX } from '@/components/ui/icons';
 import { Select } from '@/components/ui/Select';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { useFactoryAccountLabels } from '@/hooks/useFactoryAccountLabels';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { useNow } from '@/hooks/useNow';
 import { useRevealGroup } from '@/hooks/motion';
@@ -48,7 +49,7 @@ import {
 import { nextRecoveryMs } from './resetSchedule';
 import { QUOTA_ADAPTERS, getQuotaSetter, type QuotaCardState } from './providers';
 import type { QuotaProviderType } from './providers/types';
-import { buildFactoryQuotaFiles } from './providers/factory/data';
+import { buildFactoryQuotaFiles, withFactoryAccountLabels } from './providers/factory/data';
 import { useQuotaAutoLoad } from './hooks/useQuotaAutoLoad';
 import { useQuotaActions } from './hooks/useQuotaActions';
 import { useQuotaBatchLoader } from './hooks/useQuotaBatchLoader';
@@ -188,7 +189,13 @@ export function QuotaPage() {
   const tick = useNow(sortMode !== 'default');
   const sortNow = sortMode === 'default' ? 0 : tick;
 
-  const entries = useMemo(() => classifyQuotaFiles(files), [files]);
+  const factoryApiKeys = useConfigStore((state) => state.config?.factoryApiKeys);
+  const factoryLabels = useFactoryAccountLabels(factoryApiKeys, !disableControls);
+  const labeledFiles = useMemo(
+    () => withFactoryAccountLabels(files, factoryLabels),
+    [files, factoryLabels]
+  );
+  const entries = useMemo(() => classifyQuotaFiles(labeledFiles), [labeledFiles]);
   const tabCounts = useMemo(() => buildTabCounts(entries), [entries]);
   const filteredEntries = useMemo(
     () => filterEntriesBySearch(filterEntriesByTab(entries, tab), search),

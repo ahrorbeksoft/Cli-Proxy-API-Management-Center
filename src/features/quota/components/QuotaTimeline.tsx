@@ -95,7 +95,7 @@ export function QuotaTimeline({
       entries.map((entry) => ({
         name: getQuotaCacheKey(entry.file),
         displayName:
-          entry.type === 'devin'
+          entry.type === 'devin' || entry.type === 'factory'
             ? getQuotaDisplayName(entry.file)
             : displayNameFor(entry.file.name),
         provider: entry.type,
