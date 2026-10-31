@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { modelsApi } from '@/services/api';
+import { authFilesApi, modelsApi } from '@/services/api';
 import { buildHeaderObject } from '@/utils/headers';
 import { getErrorMessage } from '@/utils/helpers';
 import type { ModelInfo } from '@/utils/models';
@@ -10,13 +10,28 @@ export const MODEL_DISCOVERY_BRANDS: ReadonlyArray<ProviderBrand> = [
   'interactions',
   'codex',
   'meta',
+  'factory',
   'xai',
   'claude',
   'openaiCompatibility',
 ];
 
+// Factory has no upstream model listing; the proxy's built-in catalog is exactly what it routes.
+const CATALOG_BACKED_BRANDS: ReadonlyArray<ProviderBrand> = ['factory'];
+
 export const isModelDiscoveryBrand = (brand: ProviderBrand): boolean =>
   MODEL_DISCOVERY_BRANDS.includes(brand);
+
+// IDs only: discovery copies aliases into config, and catalog display names are not routable.
+export const catalogDefinitionsToModels = (definitions: Array<{ id?: string }>): ModelInfo[] => {
+  const seen = new Set<string>();
+  return definitions.flatMap(({ id }) => {
+    const name = String(id ?? '').trim();
+    if (!name || seen.has(name.toLowerCase())) return [];
+    seen.add(name.toLowerCase());
+    return [{ name }];
+  });
+};
 
 export interface UseModelDiscoveryArgs {
   brand: ProviderBrand;
@@ -65,7 +80,9 @@ export function useModelDiscovery(args: UseModelDiscoveryArgs): UseModelDiscover
       const baseHeaders = buildHeaderObject(formHeaders);
       const resolvedAuthIndex = (authIndex ?? '').trim() || undefined;
       let next: ModelInfo[] = [];
-      if (brand === 'gemini' || brand === 'interactions') {
+      if (CATALOG_BACKED_BRANDS.includes(brand)) {
+        next = catalogDefinitionsToModels(await authFilesApi.getModelDefinitions(brand));
+      } else if (brand === 'gemini' || brand === 'interactions') {
         const key = (apiKey ?? '').trim() || (fallbackApiKey ?? '').trim();
         next = await modelsApi.fetchGeminiModelsViaApiCall(
           baseUrl,
@@ -153,7 +170,9 @@ export function useModelDiscovery(args: UseModelDiscoveryArgs): UseModelDiscover
     setHasFetched(false);
   }, []);
 
+  const catalogBacked = CATALOG_BACKED_BRANDS.includes(brand);
   const inputSignature = useMemo(() => {
+    if (catalogBacked) return brand;
     const headerSig = formHeaders.map((h) => `${h.key}:${h.value}`).join('|');
     const entriesSig = (apiKeyEntries ?? [])
       .map(
@@ -170,7 +189,17 @@ export function useModelDiscovery(args: UseModelDiscoveryArgs): UseModelDiscover
       headerSig,
       entriesSig,
     ].join('||');
-  }, [apiKey, apiKeyEntries, authIndex, baseUrl, fallbackApiKey, formHeaders, proxyUrl]);
+  }, [
+    apiKey,
+    apiKeyEntries,
+    authIndex,
+    baseUrl,
+    brand,
+    catalogBacked,
+    fallbackApiKey,
+    formHeaders,
+    proxyUrl,
+  ]);
 
   const lastSignatureRef = useRef(inputSignature);
   useEffect(() => {
@@ -178,6 +207,10 @@ export function useModelDiscovery(args: UseModelDiscoveryArgs): UseModelDiscover
     lastSignatureRef.current = inputSignature;
     reset();
   }, [inputSignature, reset]);
+
+  useEffect(() => {
+    if (catalogBacked && !loading && !hasFetched) void fetch();
+  }, [catalogBacked, fetch, hasFetched, loading]);
 
   return { available, loading, error, models, hasFetched, fetch, reset };
 }
