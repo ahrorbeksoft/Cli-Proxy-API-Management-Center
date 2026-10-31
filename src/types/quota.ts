@@ -331,6 +331,29 @@ export interface DevinQuotaState extends DevinQuotaData {
   errorStatus?: number;
 }
 
+export interface FactoryQuotaWindow {
+  id: 'fiveHour' | 'weekly' | 'monthly';
+  label?: string;
+  remainingPercent: number | null;
+  /** Null until the window starts; Factory opens a window on first use. */
+  resetAtMs: number | null;
+  periodHours: number;
+}
+
+/** Standard-pool usage of one Factory API key (the pool Claude and GPT models draw from). */
+export interface FactoryQuotaData {
+  windows: FactoryQuotaWindow[];
+  extraUsageAllowed: boolean;
+  extraUsageBalanceCents: number | null;
+  overagePreference: string | null;
+}
+
+export interface FactoryQuotaState extends FactoryQuotaData {
+  status: 'idle' | 'loading' | 'success' | 'error';
+  error?: string;
+  errorStatus?: number;
+}
+
 /** A whitelisted quota observation from Meta's Muse key endpoint. */
 export interface MetaQuotaWindow {
   id: 'window' | 'weekly';

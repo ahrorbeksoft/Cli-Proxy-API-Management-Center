@@ -347,6 +347,7 @@
     "filter_codex": "Codex",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
+    "filter_factory": "Factory",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_iflow": "iFlow",
@@ -596,6 +597,25 @@
     "load_failed": "Kota Sorgulanamadı: {{message}}",
     "empty_title": "Devin Kimlik Bilgisi Yok",
     "empty_desc": "Kotayı Sormak için Bir Devin Kimlik Dosyası Yükle veya Arka Uç CLI ile Giriş Yap."
+  },
+  "factory_quota": {
+    "fiveHour": "5 Saatlik Sınır",
+    "weekly": "Haftalık Sınır",
+    "monthly": "Aylık Sınır",
+    "extra_usage": "Ek Kullanım",
+    "extra_on": "Açık",
+    "extra_off": "Kapalı",
+    "extra_balance": "Bakiye",
+    "unavailable": "Kullanılamaz",
+    "reset_unknown": "Sıfırlama Zamanı Kullanılamaz",
+    "not_started": "Pencere Başlamadı",
+    "missing_auth_index": "Bu Factory Anahtarının Auth Dizini Yok. Sayfayı Yenileyip Tekrar Dene.",
+    "empty_data": "Factory Kullanılabilir Kota Verisi Döndürmedi.",
+    "loading": "Factory Kotası Sorgulanıyor…",
+    "idle": "Factory Kotasını Sormak için Tıkla",
+    "load_failed": "Kota Sorgulanamadı: {{message}}",
+    "empty_title": "Factory Anahtarı Yok",
+    "empty_desc": "Kotayı Sormak için AI Sağlayıcıları Sayfasında Bir Factory API Anahtarı Ekle."
   },
   "meta_quota": {
     "title": "Muse (Meta) Kotası",
@@ -2084,6 +2104,7 @@
     },
     "providerNames": {
       "meta": "Muse (Meta)",
+      "factory": "Factory (Droid)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
       "codex": "Codex",

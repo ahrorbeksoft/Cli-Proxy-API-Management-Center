@@ -17,6 +17,8 @@ import { CLAUDE_CONFIG } from './claude/data';
 import { ClaudeQuotaBody } from './claude/ClaudeQuotaBody';
 import { DEVIN_CONFIG } from './devin/data';
 import { DevinQuotaBody } from './devin/DevinQuotaBody';
+import { FACTORY_CONFIG } from './factory/data';
+import { FactoryQuotaBody } from './factory/FactoryQuotaBody';
 import { CODEX_CONFIG } from './codex/data';
 import { CodexQuotaBody } from './codex/CodexQuotaBody';
 import { META_CONFIG } from './meta/data';
@@ -59,6 +61,7 @@ export const QUOTA_ADAPTERS: Record<QuotaProviderType, QuotaAdapter> = {
   claude: { ...CLAUDE_CONFIG, Body: ClaudeQuotaBody } as unknown as QuotaAdapter,
   codex: { ...CODEX_CONFIG, Body: CodexQuotaBody } as unknown as QuotaAdapter,
   devin: { ...DEVIN_CONFIG, Body: DevinQuotaBody } as unknown as QuotaAdapter,
+  factory: { ...FACTORY_CONFIG, Body: FactoryQuotaBody } as unknown as QuotaAdapter,
   kimi: { ...KIMI_CONFIG, Body: KimiQuotaBody } as unknown as QuotaAdapter,
   meta: { ...META_CONFIG, Body: MetaQuotaBody } as unknown as QuotaAdapter,
   plugin: { ...PLUGIN_CONFIG, Body: PluginQuotaBody } as unknown as QuotaAdapter,

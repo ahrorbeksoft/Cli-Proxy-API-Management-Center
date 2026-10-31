@@ -18,6 +18,7 @@ import {
   apiKeyFunToResource,
   claudeToResource,
   codexToResource,
+  factoryToResource,
   fennoAIToResource,
   geminiToResource,
   interactionsToResource,
@@ -147,7 +148,7 @@ const buildModelAliases = (
     .filter((m) => m.name);
 
 const buildProviderKeyConfig = (
-  brand: 'gemini' | 'interactions' | 'codex' | 'meta' | 'xai' | 'claude' | 'vertex',
+  brand: 'gemini' | 'interactions' | 'codex' | 'meta' | 'factory' | 'xai' | 'claude' | 'vertex',
   input: ProviderEntryFormInput,
   existing?: ProviderKeyConfig | GeminiKeyConfig | null
 ): ProviderKeyConfig | GeminiKeyConfig => {
@@ -394,6 +395,11 @@ export const buildProviderGroups = (config: Config): ProviderGroup[] =>
         break;
       case 'meta':
         resources = (config.metaApiKeys ?? []).map((item, index) => metaToResource(item, index));
+        break;
+      case 'factory':
+        resources = (config.factoryApiKeys ?? []).map((item, index) =>
+          factoryToResource(item, index)
+        );
         break;
       case 'xai':
         resources = (config.xaiApiKeys ?? []).map((item, index) => xaiToResource(item, index));
@@ -674,6 +680,10 @@ export function useProviderWorkbench(): UseProviderWorkbenchResult {
           await providersApi.createMetaConfig(
             buildProviderKeyConfig('meta', input) as ProviderKeyConfig
           );
+        } else if (brand === 'factory') {
+          await providersApi.createFactoryConfig(
+            buildProviderKeyConfig('factory', input) as ProviderKeyConfig
+          );
         } else if (brand === 'xai') {
           await providersApi.createXAIConfig(
             buildProviderKeyConfig('xai', input) as ProviderKeyConfig
@@ -737,6 +747,13 @@ export function useProviderWorkbench(): UseProviderWorkbenchResult {
             selector.apiKey,
             selector.baseUrl,
             buildProviderKeyConfig('meta', input, existing) as ProviderKeyConfig
+          );
+        } else if (brand === 'factory' && selector.brand === 'factory') {
+          const existing = resource.raw as ProviderKeyConfig;
+          await providersApi.updateFactoryConfig(
+            selector.apiKey,
+            selector.baseUrl,
+            buildProviderKeyConfig('factory', input, existing) as ProviderKeyConfig
           );
         } else if (brand === 'xai' && selector.brand === 'xai') {
           const existing = resource.raw as ProviderKeyConfig;
@@ -818,6 +835,14 @@ export function useProviderWorkbench(): UseProviderWorkbenchResult {
           );
           const next = (config?.metaApiKeys ?? []).filter((_, i) => i !== sel.index);
           updateConfigValue('meta-api-key', next);
+        } else if (sel.brand === 'factory') {
+          await providersApi.deleteFactoryConfig(
+            sel.apiKey,
+            sel.baseUrl,
+            (resource.raw as ProviderKeyConfig).source
+          );
+          const next = (config?.factoryApiKeys ?? []).filter((_, i) => i !== sel.index);
+          updateConfigValue('factory-api-key', next);
         } else if (sel.brand === 'xai') {
           await providersApi.deleteXAIConfig(
             sel.apiKey,
@@ -926,6 +951,7 @@ export function useProviderWorkbench(): UseProviderWorkbenchResult {
         } else if (
           (brand === 'codex' && selector.brand === 'codex') ||
           (brand === 'meta' && selector.brand === 'meta') ||
+          (brand === 'factory' && selector.brand === 'factory') ||
           (brand === 'xai' && selector.brand === 'xai') ||
           (brand === 'claude' && selector.brand === 'claude') ||
           (brand === 'vertex' && selector.brand === 'vertex')
@@ -939,6 +965,8 @@ export function useProviderWorkbench(): UseProviderWorkbenchResult {
             await providersApi.updateCodexConfig(selector.apiKey, selector.baseUrl, next);
           } else if (selector.brand === 'meta') {
             await providersApi.updateMetaConfig(selector.apiKey, selector.baseUrl, next);
+          } else if (selector.brand === 'factory') {
+            await providersApi.updateFactoryConfig(selector.apiKey, selector.baseUrl, next);
           } else if (selector.brand === 'xai') {
             await providersApi.updateXAIConfig(selector.apiKey, selector.baseUrl, next);
           } else if (selector.brand === 'claude') {

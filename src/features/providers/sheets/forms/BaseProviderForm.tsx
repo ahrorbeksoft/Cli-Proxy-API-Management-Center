@@ -66,6 +66,12 @@ const emptyApiKeyEntry = (): ApiKeyEntryInput => ({
 });
 const META_API_BASE_URL = 'https://api.meta.ai/v1';
 const XAI_API_BASE_URL = 'https://api.x.ai/v1';
+const FACTORY_API_BASE_URL = 'https://api.factory.ai';
+const DEFAULT_BASE_URLS: Partial<Record<ProviderBrand, string>> = {
+  meta: META_API_BASE_URL,
+  factory: FACTORY_API_BASE_URL,
+  xai: XAI_API_BASE_URL,
+};
 
 const stripDisableAllRule = (list?: string[]): string[] =>
   (list ?? []).filter((s) => s.trim() !== '*');
@@ -86,7 +92,7 @@ function buildInitialForm(
     return {
       apiKey: '',
       name: '',
-      baseUrl: brand === 'meta' ? META_API_BASE_URL : brand === 'xai' ? XAI_API_BASE_URL : '',
+      baseUrl: DEFAULT_BASE_URLS[brand] ?? '',
       proxyUrl: '',
       prefix: '',
       disabled: false,

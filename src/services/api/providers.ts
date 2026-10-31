@@ -212,6 +212,7 @@ export type ProviderFamily =
   | 'interactions'
   | 'codex'
   | 'meta'
+  | 'factory'
   | 'xai'
   | 'claude'
   | 'vertex'
@@ -535,6 +536,11 @@ export const providersApi = {
     updateKey('meta', apiKey, baseUrl, config),
   deleteMetaConfig: (apiKey: string, baseUrl?: string, source?: ProviderSource) =>
     deleteKey('meta', apiKey, baseUrl, source),
+  createFactoryConfig: (config: ProviderKeyConfig) => createKey('factory', config),
+  updateFactoryConfig: (apiKey: string, baseUrl: string | undefined, config: ProviderKeyConfig) =>
+    updateKey('factory', apiKey, baseUrl, config),
+  deleteFactoryConfig: (apiKey: string, baseUrl?: string, source?: ProviderSource) =>
+    deleteKey('factory', apiKey, baseUrl, source),
   createXAIConfig: (config: ProviderKeyConfig) => createKey('xai', config),
   updateXAIConfig: (apiKey: string, baseUrl: string | undefined, config: ProviderKeyConfig) =>
     updateKey('xai', apiKey, baseUrl, config),
@@ -552,6 +558,9 @@ export const providersApi = {
     deleteKey('vertex', apiKey, baseUrl, source),
   async getMetaConfigs() {
     return normalizeProviderGroups(await getGroups('meta')) as ProviderKeyConfig[];
+  },
+  async getFactoryConfigs() {
+    return normalizeProviderGroups(await getGroups('factory')) as ProviderKeyConfig[];
   },
   async getVertexConfigs() {
     return normalizeProviderGroups(await getGroups('vertex')) as ProviderKeyConfig[];

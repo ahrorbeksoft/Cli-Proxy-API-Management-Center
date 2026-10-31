@@ -2,7 +2,8 @@
  * 额度查询页：提供商 tabs + 统一卡网格。
  *
  * 保留的行为契约（重设计不改）：
- * - 现有提供商保持点击加载；Devin 首次可见时主动查询一次，不轮询；
+ * - 现有提供商保持点击加载；Devin / Factory 首次可见时主动查询一次，不轮询；
+ * - Factory keys come from config (api-keys.factory), merged after the auth-file list;
  * - cacheGeneration 会话隔离 + request-id 去重（见 useQuotaBatchLoader）；
  * - 文件列表变化后按 provider 剪枝额度缓存（已删文件不残留）；
  * - useHeaderRefresh 单槽位：本页唯一注册者，全局刷新 = 重取文件列表。
@@ -19,7 +20,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { useNow } from '@/hooks/useNow';
 import { useRevealGroup } from '@/hooks/motion';
-import { useAuthStore, useQuotaStore, useThemeStore } from '@/stores';
+import { useAuthStore, useConfigStore, useQuotaStore, useThemeStore } from '@/stores';
 import type { AuthFileItem, ResolvedTheme } from '@/types';
 import { getQuotaCacheKey } from '@/utils/quota/identity';
 import { ProviderTabs } from '@/features/authFiles/components/ProviderTabs';
@@ -47,7 +48,8 @@ import {
 import { nextRecoveryMs } from './resetSchedule';
 import { QUOTA_ADAPTERS, getQuotaSetter, type QuotaCardState } from './providers';
 import type { QuotaProviderType } from './providers/types';
-import { useDevinQuotaAutoLoad } from './providers/devin/useDevinQuotaAutoLoad';
+import { buildFactoryQuotaFiles } from './providers/factory/data';
+import { useQuotaAutoLoad } from './hooks/useQuotaAutoLoad';
 import { useQuotaActions } from './hooks/useQuotaActions';
 import { useQuotaBatchLoader } from './hooks/useQuotaBatchLoader';
 import { readQuotaUiState, writeQuotaUiState } from './uiState';
@@ -87,32 +89,43 @@ export function QuotaPage() {
   const sessionGeneration = useQuotaStore((state) => state.cacheGeneration);
   const [filesGeneration, setFilesGeneration] = useState<number | null>(null);
   const listRequestRef = useRef(0);
-  const loadFiles = useCallback(async () => {
-    const requestId = ++listRequestRef.current;
-    if (connectionStatus !== 'connected') {
-      setFiles([]);
-      setFilesGeneration(null);
-      setLoading(false);
-      return;
-    }
-    const isCurrent = () =>
-      requestId === listRequestRef.current &&
-      sessionGeneration === useQuotaStore.getState().cacheGeneration;
-    setLoading(true);
-    setError('');
-    try {
-      const data = await authFilesApi.list();
-      if (!isCurrent()) return;
-      setFiles(data?.files || []);
-      setFilesGeneration(sessionGeneration);
-    } catch (err: unknown) {
-      if (!isCurrent()) return;
-      const message = err instanceof Error ? err.message : t('notification.refresh_failed');
-      setError(message);
-    } finally {
-      if (isCurrent()) setLoading(false);
-    }
-  }, [connectionStatus, sessionGeneration, t]);
+  const loadFiles = useCallback(
+    async (forceConfig = false) => {
+      const requestId = ++listRequestRef.current;
+      if (connectionStatus !== 'connected') {
+        setFiles([]);
+        setFilesGeneration(null);
+        setLoading(false);
+        return;
+      }
+      const isCurrent = () =>
+        requestId === listRequestRef.current &&
+        sessionGeneration === useQuotaStore.getState().cacheGeneration;
+      setLoading(true);
+      setError('');
+      try {
+        const [data, config] = await Promise.all([
+          authFilesApi.list(),
+          // A config failure must not hide auth-file quotas; Factory cards are simply omitted.
+          useConfigStore
+            .getState()
+            .fetchConfig(forceConfig)
+            .catch(() => null),
+        ]);
+        if (!isCurrent()) return;
+        const listed = data?.files || [];
+        setFiles([...listed, ...buildFactoryQuotaFiles(config?.factoryApiKeys, listed)]);
+        setFilesGeneration(sessionGeneration);
+      } catch (err: unknown) {
+        if (!isCurrent()) return;
+        const message = err instanceof Error ? err.message : t('notification.refresh_failed');
+        setError(message);
+      } finally {
+        if (isCurrent()) setLoading(false);
+      }
+    },
+    [connectionStatus, sessionGeneration, t]
+  );
 
   useHeaderRefresh(loadFiles);
 
@@ -130,6 +143,7 @@ export function QuotaPage() {
   const claudeQuota = useQuotaStore((state) => state.claudeQuota);
   const codexQuota = useQuotaStore((state) => state.codexQuota);
   const devinQuota = useQuotaStore((state) => state.devinQuota);
+  const factoryQuota = useQuotaStore((state) => state.factoryQuota);
   const kimiQuota = useQuotaStore((state) => state.kimiQuota);
   const metaQuota = useQuotaStore((state) => state.metaQuota);
   const pluginQuota = useQuotaStore((state) => state.pluginQuota);
@@ -142,6 +156,7 @@ export function QuotaPage() {
         claude: claudeQuota,
         codex: codexQuota,
         devin: devinQuota,
+        factory: factoryQuota,
         kimi: kimiQuota,
         meta: metaQuota,
         plugin: pluginQuota,
@@ -152,6 +167,7 @@ export function QuotaPage() {
       claudeQuota,
       codexQuota,
       devinQuota,
+      factoryQuota,
       kimiQuota,
       metaQuota,
       pluginQuota,
@@ -260,7 +276,7 @@ export function QuotaPage() {
   const handleRefreshAll = useCallback(() => {
     if (disableControls) return;
     pendingRefreshRef.current = sessionGeneration;
-    void loadFiles();
+    void loadFiles(true);
   }, [disableControls, loadFiles, sessionGeneration]);
 
   useEffect(() => {
@@ -289,7 +305,7 @@ export function QuotaPage() {
     }
   }, [disableControls, error, filesGeneration, loading, loadQuota, pageItems, sessionGeneration]);
 
-  useDevinQuotaAutoLoad(
+  useQuotaAutoLoad(
     pageItems,
     disableControls ||
       loading ||

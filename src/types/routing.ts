@@ -23,6 +23,7 @@ export const ROUTING_KEY_FAMILIES = [
   'interactions',
   'codex',
   'meta',
+  'factory',
   'xai',
   'claude',
   'vertex',

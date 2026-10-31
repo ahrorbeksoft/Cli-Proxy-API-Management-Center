@@ -422,6 +422,7 @@
     "refresh_result_failed": "Làm mới thất bại",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
+    "filter_factory": "Factory",
     "weight_tooltip": "Mặc định là 1. Giá trị nhỏ hơn hoặc bằng 0 sẽ loại trừ credential này khỏi điều phối theo trọng số; tối đa 1.000.000. Sau khi nhập giá trị, hãy bật round robin có trọng số để có hiệu lực.",
     "policy_alias_name": "Bí danh",
     "policy_alias_display_name": "Tên hiển thị",
@@ -1970,7 +1971,8 @@
       "lmuAI": "LMU AI (Linhmou AI)",
       "infistar": "Infistar",
       "kimi": "Kimi",
-      "meta": "Muse (Meta)"
+      "meta": "Muse (Meta)",
+      "factory": "Factory (Droid)"
     },
     "table": {
       "key": "Key",
@@ -2327,6 +2329,25 @@
     "load_failed": "Truy vấn quota thất bại: {{message}}",
     "empty_title": "Không có credential Devin",
     "empty_desc": "Tải lên file credential Devin hoặc đăng nhập bằng CLI backend để truy vấn quota."
+  },
+  "factory_quota": {
+    "fiveHour": "Giới hạn 5 giờ",
+    "weekly": "Giới hạn hàng tuần",
+    "monthly": "Giới hạn hàng tháng",
+    "extra_usage": "Sử dụng thêm",
+    "extra_on": "Bật",
+    "extra_off": "Tắt",
+    "extra_balance": "Số dư",
+    "unavailable": "Không có sẵn dữ liệu",
+    "reset_unknown": "Không có thời gian đặt lại",
+    "not_started": "Chưa bắt đầu chu kỳ",
+    "missing_auth_index": "Key Factory này không có chỉ số xác thực. Vui lòng tải lại trang và thử lại.",
+    "empty_data": "Factory không trả về dữ liệu quota khả dụng nào.",
+    "loading": "Đang truy vấn quota Factory…",
+    "idle": "Nhấn để truy vấn quota Factory",
+    "load_failed": "Truy vấn quota thất bại: {{message}}",
+    "empty_title": "Không có key Factory",
+    "empty_desc": "Thêm API key Factory ở trang AI Provider để truy vấn quota."
   },
   "meta_quota": {
     "title": "Quota Muse (Meta)",

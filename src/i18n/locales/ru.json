@@ -350,6 +350,7 @@
     "filter_codex": "Codex",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
+    "filter_factory": "Factory",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_iflow": "iFlow",
@@ -586,6 +587,25 @@
     "load_failed": "Не удалось запросить квоту: {{message}}",
     "empty_title": "Нет учётных данных Devin",
     "empty_desc": "Загрузите файл учётных данных Devin или войдите через CLI сервера для запроса квоты."
+  },
+  "factory_quota": {
+    "fiveHour": "Лимит на 5 часов",
+    "weekly": "Недельный лимит",
+    "monthly": "Месячный лимит",
+    "extra_usage": "Доп. использование",
+    "extra_on": "Вкл.",
+    "extra_off": "Выкл.",
+    "extra_balance": "Баланс",
+    "unavailable": "Нет данных",
+    "reset_unknown": "Время сброса неизвестно",
+    "not_started": "Окно ещё не началось",
+    "missing_auth_index": "У ключа Factory нет индекса авторизации. Обновите страницу и повторите.",
+    "empty_data": "Factory не вернул доступных данных о квоте.",
+    "loading": "Запрос квоты Factory…",
+    "idle": "Нажмите для запроса квоты Factory",
+    "load_failed": "Не удалось запросить квоту: {{message}}",
+    "empty_title": "Нет ключей Factory",
+    "empty_desc": "Добавьте API-ключ Factory на странице «Поставщики AI», чтобы запросить квоту."
   },
   "meta_quota": {
     "title": "Квота Muse (Meta)",
@@ -2078,6 +2098,7 @@
     },
     "providerNames": {
       "meta": "Muse (Meta)",
+      "factory": "Factory (Droid)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
       "codex": "Codex",

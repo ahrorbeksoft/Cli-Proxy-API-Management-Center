@@ -345,6 +345,7 @@
     "filter_codex": "Codex",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
+    "filter_factory": "Factory",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_iflow": "iFlow",
@@ -582,6 +583,25 @@
     "load_failed": "額度查詢失敗：{{message}}",
     "empty_title": "暫無 Devin 憑證",
     "empty_desc": "上傳 Devin 憑證檔案或透過後端 CLI 登入後，即可查詢額度。"
+  },
+  "factory_quota": {
+    "fiveHour": "5 小時限額",
+    "weekly": "每週限額",
+    "monthly": "每月限額",
+    "extra_usage": "額外用量",
+    "extra_on": "已開啟",
+    "extra_off": "已關閉",
+    "extra_balance": "餘額",
+    "unavailable": "暫無資料",
+    "reset_unknown": "暫無重設時間",
+    "not_started": "視窗尚未開始",
+    "missing_auth_index": "此 Factory 金鑰缺少驗證索引，請重新整理頁面後重試。",
+    "empty_data": "Factory 未傳回可用的額度資料。",
+    "loading": "正在查詢 Factory 額度…",
+    "idle": "點擊查詢 Factory 額度",
+    "load_failed": "額度查詢失敗：{{message}}",
+    "empty_title": "暫無 Factory 金鑰",
+    "empty_desc": "在 AI 供應商頁面新增 Factory API 金鑰後，即可查詢額度。"
   },
   "meta_quota": {
     "title": "Muse (Meta) 額度",
@@ -2111,6 +2131,7 @@
     },
     "providerNames": {
       "meta": "Muse (Meta)",
+      "factory": "Factory (Droid)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
       "codex": "Codex",

@@ -9,6 +9,7 @@ import type {
   ClaudeQuotaState,
   CodexQuotaState,
   DevinQuotaState,
+  FactoryQuotaState,
   KimiQuotaState,
   MetaQuotaState,
   PluginQuotaState,
@@ -24,6 +25,7 @@ interface QuotaStoreState {
   claudeQuota: Record<string, ClaudeQuotaState>;
   codexQuota: Record<string, CodexQuotaState>;
   devinQuota: Record<string, DevinQuotaState>;
+  factoryQuota: Record<string, FactoryQuotaState>;
   kimiQuota: Record<string, KimiQuotaState>;
   metaQuota: Record<string, MetaQuotaState>;
   pluginQuota: Record<string, PluginQuotaState>;
@@ -32,6 +34,7 @@ interface QuotaStoreState {
   setClaudeQuota: (updater: QuotaUpdater<Record<string, ClaudeQuotaState>>) => void;
   setCodexQuota: (updater: QuotaUpdater<Record<string, CodexQuotaState>>) => void;
   setDevinQuota: (updater: QuotaUpdater<Record<string, DevinQuotaState>>) => void;
+  setFactoryQuota: (updater: QuotaUpdater<Record<string, FactoryQuotaState>>) => void;
   setKimiQuota: (updater: QuotaUpdater<Record<string, KimiQuotaState>>) => void;
   setMetaQuota: (updater: QuotaUpdater<Record<string, MetaQuotaState>>) => void;
   setPluginQuota: (updater: QuotaUpdater<Record<string, PluginQuotaState>>) => void;
@@ -53,6 +56,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
   claudeQuota: {},
   codexQuota: {},
   devinQuota: {},
+  factoryQuota: {},
   kimiQuota: {},
   metaQuota: {},
   pluginQuota: {},
@@ -99,6 +103,10 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
     set((state) => ({
       devinQuota: resolveUpdater(updater, state.devinQuota),
     })),
+  setFactoryQuota: (updater) =>
+    set((state) => ({
+      factoryQuota: resolveUpdater(updater, state.factoryQuota),
+    })),
   setKimiQuota: (updater) =>
     set((state) => ({
       kimiQuota: resolveUpdater(updater, state.kimiQuota),
@@ -137,6 +145,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
           claudeQuota: omitNames(state.claudeQuota),
           codexQuota: omitNames(state.codexQuota),
           devinQuota: omitNames(state.devinQuota),
+          factoryQuota: omitNames(state.factoryQuota),
           kimiQuota: omitNames(state.kimiQuota),
           metaQuota: omitNames(state.metaQuota),
           pluginQuota: omitNames(state.pluginQuota),
@@ -150,6 +159,7 @@ export const useQuotaStore = create<QuotaStoreState>((set) => ({
         claudeQuota: {},
         codexQuota: {},
         devinQuota: {},
+        factoryQuota: {},
         kimiQuota: {},
         metaQuota: {},
         pluginQuota: {},

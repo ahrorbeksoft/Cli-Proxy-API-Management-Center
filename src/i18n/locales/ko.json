@@ -347,6 +347,7 @@
     "filter_codex": "Codex",
     "filter_meta": "Muse (Meta)",
     "filter_devin": "Devin",
+    "filter_factory": "Factory",
     "filter_antigravity": "Antigravity",
     "filter_xai": "xAI",
     "filter_iflow": "iFlow",
@@ -596,6 +597,25 @@
     "load_failed": "할당량 조회 실패: {{message}}",
     "empty_title": "Devin 자격 증명 없음",
     "empty_desc": "Devin 자격 증명 파일을 업로드하거나 백엔드 CLI로 로그인하여 할당량을 조회하세요."
+  },
+  "factory_quota": {
+    "fiveHour": "5시간 한도",
+    "weekly": "주간 한도",
+    "monthly": "월간 한도",
+    "extra_usage": "추가 사용량",
+    "extra_on": "켜짐",
+    "extra_off": "꺼짐",
+    "extra_balance": "잔액",
+    "unavailable": "정보 없음",
+    "reset_unknown": "초기화 시간 정보 없음",
+    "not_started": "사용 기간 시작 전",
+    "missing_auth_index": "이 Factory 키에 인증 인덱스가 없습니다. 페이지를 새로 고친 후 다시 시도하세요.",
+    "empty_data": "Factory에서 사용할 수 있는 할당량 데이터를 반환하지 않았습니다.",
+    "loading": "Factory 할당량 조회 중…",
+    "idle": "클릭하여 Factory 할당량 조회",
+    "load_failed": "할당량 조회 실패: {{message}}",
+    "empty_title": "Factory 키 없음",
+    "empty_desc": "AI 공급자 페이지에서 Factory API 키를 추가하면 할당량을 조회할 수 있습니다."
   },
   "meta_quota": {
     "title": "Muse (Meta) 할당량",
@@ -2084,6 +2104,7 @@
     },
     "providerNames": {
       "meta": "Muse (Meta)",
+      "factory": "Factory (Droid)",
       "gemini": "Gemini",
       "interactions": "Interactions API",
       "codex": "Codex",

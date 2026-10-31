@@ -79,6 +79,7 @@ describe('buildTabCounts', () => {
       xai: 1,
       kimi: 1,
       devin: 0,
+      factory: 0,
       meta: 0,
       plugin: 0,
     });

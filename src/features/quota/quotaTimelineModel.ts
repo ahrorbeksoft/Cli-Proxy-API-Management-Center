@@ -481,7 +481,7 @@ export function buildTimelineLane(input: TimelineLaneInput): TimelineLane {
     };
   }
 
-  if (provider === 'devin') {
+  if (provider === 'devin' || provider === 'factory') {
     const windows =
       (
         quota as {

@@ -35,6 +35,7 @@ const KEY_FAMILY_CHANNELS: Record<RoutingKeyFamily, string> = {
   interactions: 'gemini-interactions',
   codex: 'codex',
   meta: 'meta',
+  factory: 'factory',
   xai: 'xai',
   claude: 'claude',
   vertex: 'vertex',

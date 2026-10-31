@@ -1,15 +1,16 @@
 import type { AuthFileItem } from '@/types';
 import { normalizeRecentRequestAuthIndex } from '@/utils/recentRequests';
-import { isDevinFile, isPluginQuotaFile } from './validators';
+import { isDevinFile, isFactoryFile, isPluginQuotaFile } from './validators';
 
 const QUOTA_IDENTITY_SEPARATOR = '\0';
 
 /**
  * Devin and backend quota providers can expose multiple credential identities
- * from one physical file, distinguished by auth_index.
+ * from one physical file, distinguished by auth_index. Factory config keys have
+ * no file at all; their masked display names can collide, so auth_index is the identity.
  */
 export function getQuotaCacheKey(file: AuthFileItem): string {
-  if (!isDevinFile(file) && !isPluginQuotaFile(file)) return file.name;
+  if (!isDevinFile(file) && !isFactoryFile(file) && !isPluginQuotaFile(file)) return file.name;
   const authIndex = normalizeRecentRequestAuthIndex(file.authIndex);
   return `${file.name}${QUOTA_IDENTITY_SEPARATOR}${authIndex ?? ''}`;
 }

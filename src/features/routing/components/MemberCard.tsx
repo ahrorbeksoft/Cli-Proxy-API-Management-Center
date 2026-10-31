@@ -14,6 +14,7 @@ const FAMILY_BRANDS: Record<string, ProviderBrand> = {
   interactions: 'interactions',
   codex: 'codex',
   meta: 'meta',
+  factory: 'factory',
   xai: 'xai',
   claude: 'claude',
   vertex: 'vertex',

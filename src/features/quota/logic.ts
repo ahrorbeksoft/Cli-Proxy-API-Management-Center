@@ -8,6 +8,7 @@ import { ANTIGRAVITY_CONFIG } from './providers/antigravity/data';
 import { CLAUDE_CONFIG } from './providers/claude/data';
 import { CODEX_CONFIG } from './providers/codex/data';
 import { DEVIN_CONFIG } from './providers/devin/data';
+import { FACTORY_CONFIG } from './providers/factory/data';
 import { KIMI_CONFIG } from './providers/kimi/data';
 import { META_CONFIG } from './providers/meta/data';
 import { PLUGIN_CONFIG } from './providers/plugin/data';
@@ -20,6 +21,7 @@ const QUOTA_FILTER_MAP: Record<QuotaProviderType, (file: AuthFileItem) => boolea
   claude: CLAUDE_CONFIG.filterFn,
   codex: CODEX_CONFIG.filterFn,
   devin: DEVIN_CONFIG.filterFn,
+  factory: FACTORY_CONFIG.filterFn,
   kimi: KIMI_CONFIG.filterFn,
   meta: META_CONFIG.filterFn,
   plugin: PLUGIN_CONFIG.filterFn,

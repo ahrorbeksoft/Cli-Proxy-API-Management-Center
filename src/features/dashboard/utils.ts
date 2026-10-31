@@ -9,6 +9,7 @@ const PROVIDER_LABELS: Record<string, string> = {
   claude: 'Claude',
   devin: 'Devin',
   meta: 'Muse (Meta)',
+  factory: 'Factory (Droid)',
   xai: 'xAI',
   vertex: 'Vertex AI',
   openai: 'OpenAI Compatible',

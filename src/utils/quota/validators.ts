@@ -29,6 +29,10 @@ export function isDevinFile(file: AuthFileItem): boolean {
   return resolveAuthProvider(file) === 'devin';
 }
 
+export function isFactoryFile(file: AuthFileItem): boolean {
+  return resolveAuthProvider(file) === 'factory';
+}
+
 export function isKimiFile(file: AuthFileItem): boolean {
   return resolveAuthProvider(file) === 'kimi';
 }
@@ -43,6 +47,7 @@ export const BUILT_IN_QUOTA_PROVIDERS: ReadonlySet<string> = new Set([
   'claude',
   'codex',
   'devin',
+  'factory',
   'kimi',
   'meta',
   'xai',
